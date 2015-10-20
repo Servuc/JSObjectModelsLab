@@ -38,7 +38,10 @@
               }
           },
           toString: {
-              /* TODO: Implement this function */
+              value: function()
+              {
+                return "Véhicule " + this._licencePlate + " roule à " + this._speed + " km/h. " + ((this._infraction) ? "Infraction!" : "Ça va, circulez...");
+              }
           },
           infraction: {
               get: function() {
@@ -61,7 +64,7 @@
     return Object.create(createSpeedCheck(), {
       validatePlate: {
           value: function(plate) {
-            return (plate.match(/[A-Z]{2}\d{3}[A-Z]{2}/) !== null);
+            return (plate.match(/[A-Z]{2}-?\d{3}-?[A-Z]{2}/) !== null);
           }
       },
       validateInfraction: {
