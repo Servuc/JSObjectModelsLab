@@ -44,7 +44,7 @@
       beforeEach: function(){
         roadAttr = JSON.parse('{ \
           "building": false, \
-          "highway": "residential", \
+          "highway": "Residential", \
           "_id": "-629863", \
           "nodes": [{ \
               "y": 369.0, \
@@ -124,7 +124,10 @@
       // Only 3 properties SHOULD be  visible
       //{ id: [Function], toString: [Function], toSVGPath: [Function] }
       equal(props.length, 3, 'Only 3 properties SHOULD be  visible in objects created by "createShape"');
-      for(prop in props){
+      console.log(props)
+      for(var cpt = 0; cpt < props.length; cpt++)
+      {
+        var prop = props[cpt];
         ok(prop === 'id' || prop === 'toString' || prop === 'toSVGString', 'One of "id" "toString" or "toSVGString"');
       }
     });
@@ -151,8 +154,8 @@
     test('Test objects created with the createRoad function', function() {
       expect(2);
       var road = window.Shapes.createRoad(roadAttr);
-      ok(typeof road.getCaterogy === 'function', 'Object Created with "createRoad" Should have a getCategory function');
-      equal(road.getCaterogy(),'Residential', 'Should return the value corresponding to the "highway" property in the attributes');
+      ok(typeof road.getCategory === 'function', 'Object Created with "createRoad" Should have a getCategory function');
+      equal(road.getCategory(),'Residential', 'Should return the value corresponding to the "highway" property in the attributes');
     });
 
     test('Test the createAmenity function', function() {
@@ -172,7 +175,7 @@
     });
 
     test('Test objects created with the  createBuilding function', function() {
-      expect(3);
+      expect(2);
       var building = window.Shapes.createBuilding(buildingAttr);
       ok(typeof building.getArea === 'function', 'Object Created with "createBuilding" Should have a getArea function');
       equal(building.getArea(),10000, 'Should return the area of the building computed from the set of points in the nodes attributes');
@@ -189,8 +192,6 @@
       ok(typeof natural.getType === 'function', 'Object Created with "createNatural" Should have a getType function');
       equal(natural.getType(),'water', 'Should return the value corresponding to the "natural" property in the attributes');
     });
-
-
 
 
 
