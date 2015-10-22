@@ -303,12 +303,15 @@
     });
 
     test('Buildings surfaces', function () {
-      expect(2);
+      expect(3);
       var mySmallestSurface = myJsonContent.buildings[0].getArea();
       var myBiggestSurface = myJsonContent.buildings[0].getArea();
 
+      var myAllBuildingsSurfacePositive = true;
       for(var cpt = 1; cpt < myJsonContent.buildings.length; cpt++)
       {
+        if(myJsonContent.buildings[cpt].getArea() < 0)
+          myAllBuildingsSurfacePositive = false;
         if(mySmallestSurface > myJsonContent.buildings[cpt].getArea())
           mySmallestSurface = myJsonContent.buildings[cpt].getArea();
         if(myBiggestSurface < myJsonContent.buildings[cpt].getArea())
@@ -316,5 +319,6 @@
       }
       equal(Math.min(mySmallestSurface, myAverageSurface), mySmallestSurface, "The average surface isn't smaller that the smallest");
       equal(Math.max(myBiggestSurface, myAverageSurface), myBiggestSurface, "The average surface isn't bigger that the biggest");
+      equal(myAllBuildingsSurfacePositive, true, "All surfaces are positive");
     });
 }());

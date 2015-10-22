@@ -83,7 +83,7 @@
         myArea += attributes.nodes[cpt].x * attributes.nodes[myNextCpt].y - attributes.nodes[cpt].y * attributes.nodes[myNextCpt].x;
       }
 
-      return myArea / 2;
+      return Math.abs(myArea / 2);
     }
 
     return building;
