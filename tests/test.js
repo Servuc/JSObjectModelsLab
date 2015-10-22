@@ -95,7 +95,7 @@
     /*---------------------------------*/
     /*  PART TWO: The "Shapes" module  */
     /*---------------------------------*/
-    var roadAttr, amenityAttr, buildingAttr, naturalAttr;
+        var roadAttr, amenityAttr, buildingAttr, naturalAttr;
     module('Unit Testing The "Shapes" Module', {
       beforeEach: function(){
         roadAttr = JSON.parse('{ \
@@ -177,21 +177,21 @@
           props.push(prop);
         }
       }
-      // Only 3 properties SHOULD be  visible
-      //{ id: [Function], toString: [Function], toSVGPath: [Function] }
+
+      // Only 4 properties SHOULD be  visible
+      //{ id: [Function], toString: [Function], toSVGPath: [Function], getName: [Function] }
       equal(props.length, 4, 'Only 4 properties SHOULD be  visible in objects created by "createShape"');
-      for(var cpt = 0; cpt < props.length; cpt++)
-      {
-        var prop = props[cpt];
-        ok(prop === 'id' || prop === 'toString' || prop === 'toSVGString' || prop === 'getName', 'One of "id" "toString" or "toSVGString" or "getName"');
-      }
+      props.forEach(function(prop){
+        ok(prop === 'id' || prop === 'toString' || prop === 'toSvgPath' || 'getName', 'One of "id" "toString", "toSvgPath" or "getName"');
+      });
+
     });
 
 
     test('Test the toSVGString method', function() {
       expect(1);
       var shape0 = window.Shapes.createShape(roadAttr);
-      equal(shape0.toSVGString(), 'M 708.0 369.0 L 743.0 396.0', 'Should create a valid SVG PATH (google SVG PATH for details)');
+      equal(shape0.toSvgPath(), 'M 708 369 L 743 396', 'Should create a valid SVG PATH (google SVG PATH for details)');
     });
 
     test('Test the name accessor', function() {
@@ -257,11 +257,13 @@
     /*-----------------------------------*/
 
     // TODO Write the whole test module for testing with the app/data/eure.json file.
+
     var myObjEure = [];
     var myJsonContent = {buildings: [], naturals: [], highways: [], amenities: []};
     var myUnused = 0;
     var myOverallSurface = 0
     var myAverageSurface = 0.0;
+
     module('Asynchronous Unit Test Module', {
         beforeEach: function() {
             stop();

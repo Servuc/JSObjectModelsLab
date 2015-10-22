@@ -21,11 +21,11 @@
       return '(id : ' + this.id + " | name : " + attributes.name + ')';
     }
 
-    shape.toSVGString = function()
+    shape.toSvgPath = function()
     {
       var myReturn = "";
       for(var cpt = 0; cpt < attributes.nodes.length; cpt++)
-        myReturn += ((cpt == 0) ? "M " : " L ") + attributes.nodes[cpt].x.toFixed(1) + " " + attributes.nodes[cpt].y.toFixed(1);
+        myReturn += ((cpt == 0) ? "M " : " L ") + attributes.nodes[cpt].x + " " + attributes.nodes[cpt].y;
 
       return myReturn;
     }
