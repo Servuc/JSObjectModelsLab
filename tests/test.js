@@ -168,7 +168,7 @@
     });
 
     test('Test proper hidding of properties', function() {
-      expect(4);
+      expect(5);
       var shape0 = window.Shapes.createShape(roadAttr);
       var prop;
       var props = [];
@@ -179,12 +179,11 @@
       }
       // Only 3 properties SHOULD be  visible
       //{ id: [Function], toString: [Function], toSVGPath: [Function] }
-      equal(props.length, 3, 'Only 3 properties SHOULD be  visible in objects created by "createShape"');
-      console.log(props)
+      equal(props.length, 4, 'Only 4 properties SHOULD be  visible in objects created by "createShape"');
       for(var cpt = 0; cpt < props.length; cpt++)
       {
         var prop = props[cpt];
-        ok(prop === 'id' || prop === 'toString' || prop === 'toSVGString', 'One of "id" "toString" or "toSVGString"');
+        ok(prop === 'id' || prop === 'toString' || prop === 'toSVGString' || prop === 'getName', 'One of "id" "toString" or "toSVGString" or "getName"');
       }
     });
 
@@ -258,33 +257,64 @@
     /*-----------------------------------*/
 
     // TODO Write the whole test module for testing with the app/data/eure.json file.
-
+    var myObjEure = [];
+    var myJsonContent = {buildings: [], naturals: [], highways: [], amenities: []};
+    var myUnused = 0;
+    var myOverallSurface = 0
+    var myAverageSurface = 0.0;
     module('Asynchronous Unit Test Module', {
-        setup: function() {
+        beforeEach: function() {
             stop();
 
             // You can load a resource before loaching the test...
-            $.get('test.json').success(function(data){
-                obj = data;
+            $.get('eure.json').success(function(data){
+                myObjEure = data;
+                myJsonContent = {buildings: [], naturals: [], highways: [], amenities: []};
+                myUnused = 0;
+                for (var cpt = 0; cpt < myObjEure.length; cpt++) {
+                  var tmpObject = myObjEure[cpt];
+
+                  if (tmpObject.hasOwnProperty("building") && tmpObject.building)
+                    myJsonContent.buildings.push(window.Shapes.createBuilding(tmpObject));
+                  else {
+                    if (tmpObject.hasOwnProperty("natural"))
+                      myJsonContent.naturals.push(window.Shapes.createNatural(tmpObject));
+                    else if (tmpObject.hasOwnProperty("highway"))
+                      myJsonContent.highways.push(window.Shapes.createRoad(tmpObject));
+                    else if (tmpObject.hasOwnProperty("amenity"))
+                      myJsonContent.amenities.push(window.Shapes.createAmenity(tmpObject));
+                    else
+                      myUnused++;
+                  }
+                }
+
+                for(var cpt = 0; cpt < myJsonContent.buildings.length; cpt++)
+                  myOverallSurface += myJsonContent.buildings[cpt].getArea();
+                myAverageSurface = myOverallSurface / myJsonContent.buildings.length;
+
                 start();
             });
-
-            // ... Or any asynchroneous task
-            // window.setTimeout(function() {
-            //     obj = {a:'OK', b:'KO'};
-            //     start();
-            // }, 1000);
-
         }
     });
 
-    test('test 1', function() {
-        equal(obj.a, 'OK', 'Message');
-        equal(obj.a+'KO', 'OKKO', 'Message');
+    test('All objects are readed', function () {
+      expect(1);
+      equal(myObjEure.length, myJsonContent.buildings.length + myJsonContent.amenities.length + myJsonContent.highways.length + myJsonContent.naturals.length + myUnused, "Some objects are missing when reading !");
     });
 
-    test('test 2', function() {
-        equal(obj.a+obj.b, 'OKKO', 'FAil');
-    });
+    test('Buildings surfaces', function () {
+      expect(2);
+      var mySmallestSurface = myJsonContent.buildings[0].getArea();
+      var myBiggestSurface = myJsonContent.buildings[0].getArea();
 
+      for(var cpt = 1; cpt < myJsonContent.buildings.length; cpt++)
+      {
+        if(mySmallestSurface > myJsonContent.buildings[cpt].getArea())
+          mySmallestSurface = myJsonContent.buildings[cpt].getArea();
+        if(myBiggestSurface < myJsonContent.buildings[cpt].getArea())
+          myBiggestSurface = myJsonContent.buildings[cpt].getArea();
+      }
+      equal(Math.min(mySmallestSurface, myAverageSurface), mySmallestSurface, "The average surface isn't smaller that the smallest");
+      equal(Math.max(myBiggestSurface, myAverageSurface), myBiggestSurface, "The average surface isn't bigger that the biggest");
+    });
 }());
