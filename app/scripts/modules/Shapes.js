@@ -14,7 +14,7 @@
 
     var shape = {};
 
-    shape.id = attributes.id;
+    shape.id = attributes._id;
 
     shape.toString = function()
     {
