@@ -14,7 +14,7 @@
 
     var shape = {};
 
-    shape.id = attributes.id;
+    shape.id = attributes._id;
 
     shape.toString = function()
     {
@@ -42,7 +42,7 @@
   Shapes.createRoad = function(attributes)
   {
     attributes = attributes || {};
-    attributes.category = attributes.category || attributes.highway || "";
+    attributes.category = attributes.category || attributes.highway || "";
     var road = Shapes.createShape(attributes);
     var superToString = road.toString();
 
@@ -70,7 +70,7 @@
 
     building.toString = function()
     {
-      return '{' + superToString + ' | area : ' + attributes.area + '}';
+      return '{' + superToString + ' | area : ' + this.getArea() + '}';
     }
 
     building.getArea = function()
